@@ -78,12 +78,7 @@ $show_complete_tasks = rand(0, 1);
                 </div>
 
                 <table class="tasks">
-<<<<<<< HEAD
                 <tr class="tasks__item task">
-=======
-                <?php if ($show_complete_tasks == 1): ?>
-                    <tr class="tasks__item task task--completed">
->>>>>>> dbf754f23784266c9e8951612c1e01ba620213a9
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden" type="checkbox" checked>
