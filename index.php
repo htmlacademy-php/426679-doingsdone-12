@@ -81,16 +81,12 @@ $tasks = [
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php
-                        $index = 0;
-                        $num = count($projects);
-                        while($num > $index): ?>
+                        <?php foreach ($projects as $key): ?>
                         <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#"><?=$projects[$index]; ?></a>
+                            <a class="main-navigation__list-item-link" href="#"><?= $key; ?></a>
                             <span class="main-navigation__list-item-count">0</span>
                         </li>
-                        <?php $index++; ?>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </ul>
                 </nav>
 
