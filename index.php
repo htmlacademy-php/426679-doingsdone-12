@@ -81,9 +81,9 @@ $tasks = [
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php foreach ($projects as $key): ?>
+                        <?php foreach ($projects as $project): ?>
                         <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#"><?= $key; ?></a>
+                            <a class="main-navigation__list-item-link" href="#"><?= $project; ?></a>
                             <span class="main-navigation__list-item-count">0</span>
                         </li>
                         <?php endforeach; ?>
@@ -118,18 +118,18 @@ $tasks = [
                     </label>
                 </div>
                 <table class="tasks">
-                <?php foreach($tasks as $key => $val): ?>
-                <?php if ($val['completed'] && $show_complete_tasks == 0) : ?>
+                <?php foreach($tasks as $task): ?>
+                <?php if ($task['completed'] && $show_complete_tasks == 0) : ?>
                 <?php continue; ?>
                 <?php else: ?>
-                <tr class="tasks__item task <?php echo $val['completed'] ? 'task--completed' : ''?>">
+                <tr class="tasks__item task <?php echo $task['completed'] ? 'task--completed' : ''?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
                             <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                            <span class="checkbox__text"><?= $val['task']; ?></span>
+                            <span class="checkbox__text"><?= $task['task']; ?></span>
                         </label>
                     </td>
-                    <td class="task__date"><?php echo $val['date'] != 'null' ? $val['date'] : ''; ?></td>
+                    <td class="task__date"><?php echo $task['date'] != 'null' ? $task['date'] : ''; ?></td>
                     <td class="task__controls"></td>
                 </tr>
                 <?php endif; ?>
