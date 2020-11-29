@@ -40,6 +40,17 @@ $tasks = [
         'completed' => false
     ]
 ];
+
+function countElements(array $elements, $value){
+    $intElement = 0;
+    foreach($elements as $element){
+        if($element['category'] == $value){
+            $intElement++;
+        }
+    };
+    return $intElement;
+};
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -84,7 +95,7 @@ $tasks = [
                         <?php foreach ($projects as $project): ?>
                         <li class="main-navigation__list-item">
                             <a class="main-navigation__list-item-link" href="#"><?= $project; ?></a>
-                            <span class="main-navigation__list-item-count">0</span>
+                            <span class="main-navigation__list-item-count"><?= countElements($tasks, $project);?></span>
                         </li>
                         <?php endforeach; ?>
                     </ul>
