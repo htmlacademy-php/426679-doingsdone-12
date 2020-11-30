@@ -5,7 +5,7 @@
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
                     <a class="main-navigation__list-item-link" href="#"><?= $project; ?></a>
-                    <span class="main-navigation__list-item-count"><?= countElements($tasks, $project);?></span>
+                    <span class="main-navigation__list-item-count"><?= filterEsc(countElements($tasks, $project));?></span>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -42,7 +42,7 @@
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                    <span class="checkbox__text"><?= $task['task']; ?></span>
+                    <span class="checkbox__text"><?= filterEsc($task['task']); ?></span>
                 </label>
             </td>
             <td class="task__date"><?php echo $task['date'] != 'null' ? $task['date'] : ''; ?></td>
