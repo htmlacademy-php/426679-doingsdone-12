@@ -15,6 +15,11 @@ require_once('templates/data.php');
         return $intElement;
     };
 
+    function filterEsc($str){
+        $text = htmlspecialchars($str);
+        return $text;
+    }
+
 
     $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'show_complete_tasks' => $show_complete_tasks]);
     $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Дела в порядке']);
