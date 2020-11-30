@@ -54,14 +54,4 @@
     </main>
 </div>
 
-<?php
-    function countElements(array $elements, $value){
-        $intElement = 0;
-        foreach($elements as $element){
-            if($element['category'] == $value){
-                $intElement++;
-            }
-        };
-        return $intElement;
-    };
-?>
+

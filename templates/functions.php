@@ -1,11 +1,9 @@
 <?php
-    function include_template($name, $project, $task){
+    function include_template($name, $project){
         $name = 'templates/' . $name;
         $result = '';
 
-        if (!file_exists($name)) {
-            return $result;
-        }
+        
         ob_start();
         extract($project);
         require $name;
