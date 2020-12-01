@@ -1,4 +1,5 @@
 <?php
+    //Поиск файл и его открытие
     function include_template($name, $data){
         $name = __DIR__ . '/' . $name;
         $result = '';
@@ -14,6 +15,7 @@
         return $result;
     }
 
+    //Подсчет проектов
     function countElements(array $elements, $value){
         $intElement = 0;
         foreach($elements as $element){
@@ -24,11 +26,13 @@
         return $intElement;
     };
 
+    //Фильтр на символы
     function filterEsc($str){
         $text = htmlspecialchars($str);
         return $text;
     }
 
+    //Считаем часы до завершения
     function date_complit($received_date) {
         $ts = time();
         $secs_in_day = 86400;

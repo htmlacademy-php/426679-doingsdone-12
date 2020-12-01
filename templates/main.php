@@ -39,12 +39,12 @@
         <?php continue; ?>
         <?php else: ?>
         <tr class="tasks__item task <?php echo $task['completed'] ? 'task--completed' : ''?>
+        <!-- Считаем часы до завершения --!>
         <?php if ($task['date'] == 'null' || $task['completed']) : ?>
             ''
         <?php elseif(date_complit($task['date']) <= 24)  : ?>
             task--important
         <?php endif ?>">
-
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden" type="checkbox" checked>
