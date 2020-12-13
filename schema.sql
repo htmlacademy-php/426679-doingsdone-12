@@ -10,28 +10,27 @@ CREATE TABLE users (
     email VARCHAR(128) NOT NULL UNIQUE,
     password CHAR(64) NOT NULL UNIQUE,
     dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)ENGINE = InnoDB;
+);
 
 CREATE TABLE projects (
 	project_id INT AUTO_INCREMENT PRIMARY KEY,
-	project_user VARCHAR(128) NOT NULL UNIQUE,
-	title_project VARCHAR(128) NOT NULL UNIQUE,
-	INDEX idxProjectUser (project_user),
-	CONSTRAINT project_user_td FOREIGN KEY (project_user) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE
-)ENGINE = InnoDB;
+	user_id INT,
+	title_project VARCHAR(128) NOT NULL,
+	INDEX idxProjectUser (user_id),
+	CONSTRAINT project_user_td FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 CREATE TABLE tasks (
     task_id INT AUTO_INCREMENT PRIMARY KEY,
-    task_user VARCHAR(128) NOT NULL UNIQUE,
-    task_project VARCHAR(128) NOT NULL UNIQUE,
+    user_id INT,
+    project_id INT,
     dt_task TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     st_check INT(1) DEFAULT 0,
     title_task VARCHAR(128) NOT NULL,
-    dl_file TEXT(65535) NULL,
+    dl_file VARCHAR(4000) NULL,
     dt_end DATE NULL,
-    INDEX idxTasksUser (task_user),
-    INDEX idxTaskProject (task_project),
-    CONSTRAINT users_task_td FOREIGN KEY (task_user) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT project_task_td FOREIGN KEY (task_project) REFERENCES projects (title_project) ON DELETE CASCADE ON UPDATE CASCADE
-)ENGINE = InnoDB;
-
+    INDEX idxTasksUser (user_id),
+    INDEX idxTaskProject (project_id),
+    CONSTRAINT users_task_td FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT project_task_td FOREIGN KEY (project_id) REFERENCES projects (project_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
