@@ -30,5 +30,9 @@ UPDATE tasks SET st_check = 1 WHERE title_task ='Встреча с другом'
 /* обновляем название задачи по индентификатору */
 UPDATE tasks SET title_task = 'Заказать пиццу' WHERE task_id = 2;
 
+/* Выводим список всех проектов для одного пользователя */
+SELECT username, title_project FROM users, projects WHERE users.user_id = projects.user_id AND users.user_id = 1;
+
 /* Выводим список всех задач для одного проекта */
-SELECT username, title_project FROM users username, projects t WHERE u.user_id = p.user_id AND u.user_id = 1;
+SELECT title_project, title_task FROM projects, tasks WHERE projects.project_id = tasks.project_id AND projects.project_id = 3;
+
