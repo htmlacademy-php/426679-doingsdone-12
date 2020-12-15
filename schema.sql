@@ -5,7 +5,7 @@ CREATE DATABASE doingsdone
 USE doingsdone;
 
 CREATE TABLE users (
-    user_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     username VARCHAR(128) NOT NULL UNIQUE,
     email VARCHAR(128) NOT NULL UNIQUE,
     password CHAR(64) NOT NULL UNIQUE,
@@ -13,15 +13,15 @@ CREATE TABLE users (
 );
 
 CREATE TABLE projects (
-	project_id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT AUTO_INCREMENT PRIMARY KEY,
 	user_id INT,
 	title_project VARCHAR(128) NOT NULL,
 	INDEX idxProjectUser (user_id),
-	CONSTRAINT project_user_td FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT project_user_td FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE tasks (
-    task_id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     project_id INT,
     dt_task TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -31,6 +31,6 @@ CREATE TABLE tasks (
     dt_end DATE NULL,
     INDEX idxTasksUser (user_id),
     INDEX idxTaskProject (project_id),
-    CONSTRAINT users_task_td FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT project_task_td FOREIGN KEY (project_id) REFERENCES projects (project_id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT users_task_td FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT project_task_td FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
