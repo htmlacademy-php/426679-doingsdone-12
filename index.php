@@ -1,5 +1,13 @@
 <?php
 
+$dd_conf = mysqli_connect("localhost", "root", "root", "doingsdone");
+if ($dd_conf == false){
+    print('Ошибка подключения: ' . mysqli_connect_error());
+}
+else {
+    print("Соединение установлено");
+}
+
 require_once('templates/functions.php');
 require_once('templates/data.php');
 
