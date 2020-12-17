@@ -8,13 +8,22 @@ else {
     print("Соединение установлено");
 }
 
-$sql = "SELECT username, title_project FROM users, projects WHERE users.id = projects.id AND users.id = 1";
-$result = mysqli_query($dd_conf, $sql);
+/**/
+
 require_once('templates/functions.php');
-require_once('templates/data.php');
+/* require_once('templates/data.php'); */
+
+$sql = "SELECT title_project, projects.user_id FROM projects";
+$result = mysqli_query($dd_conf, $sql);
 
 if($result){
-    $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+$sql = "SELECT title_task, user_id, project_id, dt_end FROM tasks WHERE tasks.user_id = 1";
+$result = mysqli_query($dd_conf, $sql);
+if($result){
+    $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);    
 }
 
 $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'show_complete_tasks' => $show_complete_tasks]);
