@@ -51,7 +51,7 @@
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>
-            <td class="task__date"><?php echo $task['st_check'] != 'null' ? $task['st_check'] : ''; ?></td>
+            <td class="task__date"><?php echo $task['st_check'] != 'null' ? $task['dt_end'] : ''; ?></td>
             <td class="task__controls"></td>
         </tr>
         <?php endif; ?>
