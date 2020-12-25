@@ -1,5 +1,7 @@
 <?php
 
+/**/
+
 require_once('templates/functions.php');
 require_once('templates/data.php');
 

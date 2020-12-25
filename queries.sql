@@ -18,6 +18,10 @@ INSERT INTO projects (title_project, user_id) VALUES
 SELECT * FROM tasks;
 INSERT INTO tasks (title_task, user_id, project_id, st_check, dt_end) VALUES
 	('Собеседование в IT компании', 1, 3, DEFAULT, '01.12.2020'),
+	('Проверка ДЗ', 1, 3, DEFAULT, '05.12.2020'),
+	('Уборка квартиры', 1, 4, DEFAULT, '10.12.2020'),
+	('Прогулка', 1, 4, DEFAULT, '11.12.2020'),
+	('Уборка квартиры', 2, 4, DEFAULT, '09.12.2020'),
 	('Выполнить тестовое задание', 2, 3, DEFAULT, '04.12.2020'),
 	('Сделать задание первого раздела', 3, 2, 1, '01.12.2019'),
 	('Встреча с другом', 2, 1, DEFAULT, '22.12.2019'),

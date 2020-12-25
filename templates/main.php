@@ -4,8 +4,8 @@
         <ul class="main-navigation__list">
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?= $project; ?></a>
-                    <span class="main-navigation__list-item-count"><?= filterEsc(countElements($tasks, $project));?></span>
+                    <a class="main-navigation__list-item-link" href="#"><?= $project['title_project']; ?></a>
+                    <span class="main-navigation__list-item-count"><?= countElements($project, $tasks) ?></span>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -35,23 +35,23 @@
     </div>
     <table class="tasks">
         <?php foreach($tasks as $task): ?>
-        <?php if ($task['completed'] && $show_complete_tasks == 0) : ?>
+        <?php if ($task['st_check'] && $show_complete_tasks == 0) : ?>
         <?php continue; ?>
         <?php else: ?>
-        <tr class="tasks__item task <?php echo $task['completed'] ? 'task--completed' : ''?>
+        <tr class="tasks__item task <?php echo $task['st_check'] ? 'task--completed' : ''?>
         <!-- Считаем часы до завершения --!>
-        <?php if ($task['date'] == 'null' || $task['completed']) : ?>
+        <?php if ($task['dt_end'] == 'null' || $task['st_check']) : ?>
             ''
-        <?php elseif(date_complit($task['date']) <= 24)  : ?>
+        <?php elseif(date_complit($task['dt_end']) <= 24)  : ?>
             task--important
         <?php endif ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                    <span class="checkbox__text"><?= filterEsc($task['task']); ?></span>
+                    <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>
-            <td class="task__date"><?php echo $task['date'] != 'null' ? $task['date'] : ''; ?></td>
+            <td class="task__date"><?php echo $task['st_check'] != 'null' ? $task['dt_end'] : ''; ?></td>
             <td class="task__controls"></td>
         </tr>
         <?php endif; ?>

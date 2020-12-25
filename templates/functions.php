@@ -16,13 +16,14 @@
     }
 
     //Подсчет проектов
-    function countElements(array $elements, $value){
+    function countElements(array $elements, array $values){
         $intElement = 0;
-        foreach($elements as $element){
-            if($element['category'] == $value){
-                $intElement++;
+        print($values['id']);  
+            foreach($values as $value){
+                if($value['project_id'] == $elements['user_id']){
+                    $intElement++;
+                }
             }
-        };
         return $intElement;
     };
 
