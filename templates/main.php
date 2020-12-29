@@ -5,7 +5,7 @@
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
                     <!-- Выводим проекты -->
-                    <a class="main-navigation__list-item-link" href="?tab=<?= $project['title_project']; ?>&sort=<?= $project['user_id']; ?>"><?= $project['title_project']; ?></a>
+                    <a class="main-navigation__list-item-link <?= $tasks_sort ? 'main-navigation__list-item--active' : '' ?>" href="<?=add_Link($project);?>"><?= $project['title_project']; ?></a>
                     <span class="main-navigation__list-item-count"><?= countElements($project, $tasks) ?></span>
                 </li>
             <?php endforeach; ?>
