@@ -4,7 +4,8 @@
         <ul class="main-navigation__list">
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?= $project['title_project']; ?></a>
+                    <!-- Выводим проекты -->
+                    <a class="main-navigation__list-item-link <?= $project['id'] == $sort ? 'main-navigation__list-item--active' : '' ?>" href="<?=add_Link($project);?>"><?= $project['title_project']; ?></a>
                     <span class="main-navigation__list-item-count"><?= countElements($project, $tasks) ?></span>
                 </li>
             <?php endforeach; ?>
@@ -17,7 +18,6 @@
     <h2 class="content__main-heading">Список задач</h2>
         <form class="search-form" action="index.php" method="post" autocomplete="off">
             <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
-
             <input class="search-form__submit" type="submit" name="" value="Искать">
         </form>
     <div class="tasks-controls">
@@ -34,12 +34,12 @@
         </label>
     </div>
     <table class="tasks">
-        <?php foreach($tasks as $task): ?>
+        <?php foreach($tasks_sort as $task): ?>
         <?php if ($task['st_check'] && $show_complete_tasks == 0) : ?>
         <?php continue; ?>
         <?php else: ?>
         <tr class="tasks__item task <?php echo $task['st_check'] ? 'task--completed' : ''?>
-        <!-- Считаем часы до завершения --!>
+        <!-- Считаем часы до завершения -->
         <?php if ($task['dt_end'] == 'null' || $task['st_check']) : ?>
             ''
         <?php elseif(date_complit($task['dt_end']) <= 24)  : ?>

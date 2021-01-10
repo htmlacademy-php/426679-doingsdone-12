@@ -18,7 +18,7 @@
     //Подсчет проектов
     function countElements(array $elements, array $values){
         $intElement = 0;
-        print($values['id']);  
+        print($values['id']);
             foreach($values as $value){
                 if($value['project_id'] == $elements['user_id']){
                     $intElement++;
@@ -41,4 +41,10 @@
         $hours = floor(($end_ts - $ts) / 3600);
         return $hours;
     };
+
+    //Формируем ссылку
+    function add_Link($value){
+        $element = '?tab=' . $value['title_project'] . '&sort=' . $value['user_id'];
+        return $element;
+    }
 ?>
