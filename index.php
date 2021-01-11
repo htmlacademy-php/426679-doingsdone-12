@@ -1,14 +1,11 @@
 <?php
 
 /**/
-
+require_once('templates/db_conf.php');
 require_once('templates/functions.php');
 $user = 4;
 
-$dd_conf = mysqli_connect("localhost", "root", "root", "doingsdone");
-if ($dd_conf == false){
-    print('Ошибка подключения: ' . mysqli_connect_error());
-}
+
 
 $sql = "SELECT id, title_project, projects.user_id FROM projects";
 $result = mysqli_query($dd_conf, $sql);
@@ -33,14 +30,14 @@ if($sort){
     if(!$tasks_sort){
         http_response_code(404);
     }
-
 }
 else {
     $tasks_sort = $tasks;
 }
 
 $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Дела в порядке']);
+$add_task = include_template('add.php', ['projects' => $projects, 'tasks' => $tasks, 'sort' => $sort]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'content' => $add_task, 'title' => 'Дела в порядке']);
 print($layout_content);
 
 ?>

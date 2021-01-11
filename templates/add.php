@@ -1,4 +1,22 @@
-<main class="content__main">
+<div class="content">
+      <section class="content__side">
+        <h2 class="content__side-heading">Проекты</h2>
+        <nav class="main-navigation">
+        <ul class="main-navigation__list">
+            <?php foreach ($projects as $project): ?>
+                <li class="main-navigation__list-item">
+                    <!-- Выводим проекты -->
+                    <a class="main-navigation__list-item-link <?= $project['id'] == $sort ? 'main-navigation__list-item--active' : '' ?>" href="<?=add_Link($project);?>"><?= $project['title_project']; ?></a>
+                    <span class="main-navigation__list-item-count"><?= countElements($project, $tasks) ?></span>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </nav>
+
+        <a class="button button--transparent button--plus content__side-button" href="form-project.html">Добавить проект</a>
+      </section>
+
+      <main class="content__main">
         <h2 class="content__main-heading">Добавление задачи</h2>
 
         <form class="form"  action="index.html" method="post" autocomplete="off">
@@ -11,9 +29,12 @@
           <div class="form__row">
             <label class="form__label" for="project">Проект <sup>*</sup></label>
 
-            <select class="form__input form__input--select" name="project" id="project">
-              <option value="">Входящие</option>
+            <select class="form__input form__input--select" name="project" id="<?= $project['title_project']; ?>">
+            <?php foreach ($projects as $project): ?>
+              <option value=""><?= $project['title_project']; ?></option>
+              <?php endforeach; ?>
             </select>
+
           </div>
 
           <div class="form__row">
@@ -39,3 +60,6 @@
           </div>
         </form>
       </main>
+    </div>
+  </div>
+</div>
