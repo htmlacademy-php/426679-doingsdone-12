@@ -5,4 +5,6 @@ if ($dd_conf == false){
     print('Ошибка подключения: ' . mysqli_connect_error());
 }
 
+$user = 4;
+
 ?>

@@ -3,9 +3,6 @@
 /**/
 require_once('templates/db_conf.php');
 require_once('templates/functions.php');
-$user = 4;
-
-
 
 $sql = "SELECT id, title_project, projects.user_id FROM projects";
 $result = mysqli_query($dd_conf, $sql);
@@ -36,8 +33,7 @@ else {
 }
 
 $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
-$add_task = include_template('add.php', ['projects' => $projects, 'tasks' => $tasks, 'sort' => $sort]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'content' => $add_task, 'title' => 'Дела в порядке']);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'content' => $page_content, 'title' => 'Дела в порядке']);
 print($layout_content);
 
 ?>
