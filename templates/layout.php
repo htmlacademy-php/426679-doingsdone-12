@@ -20,7 +20,7 @@
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="templates/add.php">Добавить задачу</a>
+                <a class="main-header__side-item button button--plus open-modal" href="?addClick">Добавить задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__data">
@@ -32,7 +32,9 @@
             </div>
         </header>
 
-        <div class="content"><?= $content; ?></div>
+        <div class="content">
+            <?= $content; ?>
+        </div>
     </div>
 </div>
 
