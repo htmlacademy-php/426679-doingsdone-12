@@ -19,13 +19,11 @@
         <h2 class="content__main-heading">Добавление задачи</h2>
         <form class="form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
           <div class="form__row">
-
             <?php $classname =  isset($errors['name']) ? "form__input--error" : ""; ?>
-            <?php if($errors=='error'){ "<p class='form__message'>";} ?>
+            <?php if($errors['name']){ echo '<p class="form__message">';} ?>
             <label class="form__label" for="name">Название <sup>*</sup></label>
-            <?php if($errors){"</p>";} ?>
             <input class="form__input <?= $classname?>" type="text" name="name" id="name" value="" placeholder="Введите название">
-
+            <?php if($errors['name']){echo "</p>";} ?>
         </div>
 
           <div class="form__row">

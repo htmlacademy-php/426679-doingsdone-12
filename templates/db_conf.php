@@ -5,7 +5,7 @@ if ($dd_conf == false){
     print('Ошибка подключения: ' . mysqli_connect_error());
 }
 
-$user = 4;
+$user = 1;
 
 //Получаем все проекты
 $sql = "SELECT id, title_project, projects.user_id FROM projects";
