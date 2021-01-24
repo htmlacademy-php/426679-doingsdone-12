@@ -4,7 +4,7 @@
 require_once('templates/db_conf.php');
 require_once('templates/functions.php');
 
-    
+
 
 //Добавляем задачу
 if(!$errors){
@@ -21,8 +21,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $requireds = ['name', 'project'];
     $title_tasks = $_POST['name'];
     $projects_id = $_POST['project'];
-    $dt_end = $_POST['date'];
-    $file_name = 'null';
+    $sql = "SELECT projects.id, title_project
+            FROM projects
+            WHERE title_project = '". $_POST['project'] . "'";
+    $result = mysqli_query($dd_conf, $sql);
+    if($result){
+        $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        foreach($result as $res){
+            $projects_id = $res['id'];
+        }
+    }
+    if(is_date_valid($_POST['date'])){
+        $dt_end = $_POST['date'];
+    }
     $errors = [];
     foreach($requireds as $required){
         if(empty($_POST[$required])){
@@ -40,7 +51,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $dl_file['path'] = $file_name;
             move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
         }
-        $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES ( $user, $projects_id, $title_tasks, $dt_end, $file_name)";
+        $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES ( $user, $projects_id, '$title_tasks', '$dt_end', null)";
         $stmt = mysqli_prepare($dd_conf, $sql);
         $res = mysqli_stmt_execute($stmt);
         $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
