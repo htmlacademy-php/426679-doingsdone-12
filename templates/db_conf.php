@@ -16,7 +16,7 @@ if($result){
 }
 
 //Получаем все задачи
-$sql = "SELECT title_task, user_id, project_id, dt_end FROM tasks WHERE tasks.user_id = " . $user;
+$sql = "SELECT title_task, user_id, project_id, dt_end, dl_file FROM tasks WHERE tasks.user_id = " . $user;
 $result = mysqli_query($dd_conf, $sql);
 if($result){
     $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);

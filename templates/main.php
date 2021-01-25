@@ -51,6 +51,13 @@
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>
+            <td class="task__file">
+                <?php if (!empty($task['dl_file'])):?>
+                    <a href="/uploads/<?=$task['dl_file']?>">
+                        <img src="img\download-link.png" alt="Файл задачи">
+                    </a>
+                <?php endif; ?>
+            </td>
             <td class="task__date"><?php echo $task['st_check'] != 'null' ? $task['dt_end'] : ''; ?></td>
             <td class="task__controls"></td>
         </tr>
