@@ -8,13 +8,13 @@ require_once('templates/functions.php');
 
 //Добавляем задачу
 if(!$errors){
-if(isset($_GET['addClick'])){
-    $page_content = include_template('add.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
-}
+    if(isset($_GET['addClick'])){
+        $page_content = include_template('add.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
+    }
 //Показываем все задачи
-else {
-    $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
-}
+    else {
+        $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
+    }
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
