@@ -1,6 +1,8 @@
 <?php
 
+require_once('templates/functions.php');
 $link = conect();
+$errors = [];
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $requireds = ['name', 'project'];
@@ -19,16 +21,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(is_date_valid($_POST['date'])){
         $dt_end = $_POST['date'];
     }else{
-        $dt_end = "NULL";
+        $errors['date'] = 'error';
     }
-    $errors = [];
+
     foreach($requireds as $required){
         if(empty($_POST[$required])){
             $errors[$required] = 'error';
         }
     }
     if (count($errors)) {
-        $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
+        addTaskPage($errors, $projects, $tasks);
     }
     else {
         if(isset($_FILES['file'])){
@@ -40,10 +42,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $file_name = NULL;
             }
         }
-        $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES ( ". user_db() .", $projects_id, '$title_tasks', $dt_end , '$file_name' )";
+        $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES ( ". user_db() .", $projects_id, '$title_tasks', '$dt_end' , '$file_name' )";
         $stmt = mysqli_prepare($link, $sql);
         $res = mysqli_stmt_execute($stmt);
         header("Location: index.php");
     }
+}else {
+    addTaskPage($errors, $projects, $tasks);
 }
 ?>

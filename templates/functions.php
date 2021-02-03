@@ -1,4 +1,10 @@
 <?php
+
+$conection = conect();
+$projects = project($conection);
+$tasks = task($conection, user_db());
+$tasks_sort = sort_task($conection, $tasks, user_db());
+
     //Подключаем базу
     function conect(){
         $dd_conf = mysqli_connect("localhost", "root", "root", "doingsdone");
@@ -103,6 +109,17 @@
         $dateTimeObj = date_create_from_format($format_to_check, $date);
 
         return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+    }
+    //Выводим страницу добавления задачи
+    function addTaskPage($errors, $projects, $tasks){
+        $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
+        layout($page_content);
+    }
+
+    //Выводим главную страницу
+    function layout($page_content){
+        $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Дела в порядке']);
+        print($layout_content);
     }
 
     //Поиск юзера
