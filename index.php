@@ -3,6 +3,10 @@
 /**/
 require_once('templates/functions.php');
 
+$conection = conect();
+$projects = project($conection);
+$tasks = task($conection, user_db());
+$tasks_sort = sort_task($conection, $tasks, user_db());
 
 
 
