@@ -1,4 +1,7 @@
+<?php
 
+    require_once('register.php');
+?>
 
 <body>
   <h1 class="visually-hidden">Дела в порядке</h1>
