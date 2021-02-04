@@ -122,20 +122,19 @@ $tasks_sort = sort_task($conection, $tasks, user_db());
         print($layout_content);
     }
 
-    function register(){
-        $page_content = include_template('addRegister.php', ['title' => 'Дела в порядке']);
+    function register($errors, $form){
+        $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
         layout($page_content);
     }
 
     function userSearch($link, $email){
         $sql = "SELECT email FROM users WHERE email = '$email' ";
         $result = mysqli_query($link, $sql);
-        if($result){
-            $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            foreach($result as $res){
-                $projects_id = $res['email'];
-            }
+        if(!$result){
+            return 'Email существует';
         }
+        return 'Email не существует';
+
     }
 
     //Поиск юзера
