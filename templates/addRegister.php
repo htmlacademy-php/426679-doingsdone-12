@@ -29,7 +29,6 @@
               <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
             </div>
 
-            <input type="radio" >
             <div class="form__row">
               <label class="form__label" for="name">Имя <sup>*</sup></label>
 

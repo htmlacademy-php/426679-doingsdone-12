@@ -130,12 +130,18 @@ $tasks_sort = sort_task($conection, $tasks, user_db());
     function userSearch($link, $email){
         $sql = "SELECT email FROM users WHERE email = '$email' ";
         $result = mysqli_query($link, $sql);
-        if(!$result){
-            return 'Email существует';
+        if($result){
+            $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            foreach($result as $key){
+                if($email == $key['email']){
+                    return 'Email существует';
+                }
+            }
         }
         return 'Email не существует';
-
     }
+
+    
 
     //Поиск юзера
     function user_db(){
