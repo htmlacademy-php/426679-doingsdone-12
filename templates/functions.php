@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $conection = conect();
 $projects = project($conection);
 $tasks = task($conection, user_db());
@@ -121,27 +121,56 @@ $tasks_sort = sort_task($conection, $tasks, user_db());
         $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Дела в порядке']);
         print($layout_content);
     }
-
+    //Выводим страницу регистрации
     function register($errors, $form){
         $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
         layout($page_content);
     }
+    //Формируем запрос для записи в базу
+    function db_get_prepare_stmt($link, $sql, $data = []) {
+        $stmt = mysqli_prepare($link, $sql);
 
-    function userSearch($link, $email){
-        $sql = "SELECT email FROM users WHERE email = '$email' ";
-        $result = mysqli_query($link, $sql);
-        if($result){
-            $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            foreach($result as $key){
-                if($email == $key['email']){
-                    return 'Email существует';
+        if ($stmt === false) {
+            $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+            die($errorMsg);
+        }
+
+        if ($data) {
+            $types = '';
+            $stmt_data = [];
+
+            foreach ($data as $value) {
+                $type = 's';
+
+                if (is_int($value)) {
+                    $type = 'i';
+                }
+                else if (is_string($value)) {
+                    $type = 's';
+                }
+                else if (is_double($value)) {
+                    $type = 'd';
+                }
+
+                if ($type) {
+                    $types .= $type;
+                    $stmt_data[] = $value;
                 }
             }
-        }
-        return 'Email не существует';
-    }
 
-    
+            $values = array_merge([$stmt, $types], $stmt_data);
+
+            $func = 'mysqli_stmt_bind_param';
+            $func(...$values);
+
+            if (mysqli_errno($link) > 0) {
+                $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+                die($errorMsg);
+            }
+        }
+
+        return $stmt;
+    }
 
     //Поиск юзера
     function user_db(){

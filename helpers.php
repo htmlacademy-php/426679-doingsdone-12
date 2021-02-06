@@ -64,7 +64,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
-
+        
         if (mysqli_errno($link) > 0) {
             $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
             die($errorMsg);

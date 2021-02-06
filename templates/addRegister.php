@@ -16,23 +16,31 @@
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
               <input class="form__input <?php echo $errors['email'] ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= $_POST['email'] ?>" placeholder="Введите e-mail">
-                <?php if($errors['email']=='Email существует'): ?>
-                    <p class="form__message">Данный E-mail сущетвует</p>
+                <?php if($errors['email']=='Проверьте написание Email'): ?>
+                    <p class="form__message">Проверьте написание Email</p>
+                <?php elseif($errors['email']=='Email существует'): ?>
+                    <p class="form__message">Пользователь с этим email уже зарегистрирован</p>
                 <?php elseif($errors['email']=='Это поле надо заполнить'): ?>
-                    <p class="form__message">E-mail введён некорректно</p>
+                    <p class="form__message">Это поле надо заполнить</p>
                 <?php endif ?>
             </div>
 
             <div class="form__row">
               <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-              <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+              <input class="form__input <?php echo $errors['password'] ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+              <?php if($errors['password']=='Это поле надо заполнить'): ?>
+                    <p class="form__message">Это поле надо заполнить</p>
+                <?php endif ?>
             </div>
 
             <div class="form__row">
               <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-              <input class="form__input" type="text" name="name" id="name" value="<?= $_POST['name'] ?>" placeholder="Введите имя">
+              <input class="form__input <?php echo $errors['name'] ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= $_POST['name'] ?>" placeholder="Введите имя">
+              <?php if($errors['name']=='Это поле надо заполнить'): ?>
+                    <p class="form__message">Это поле надо заполнить</p>
+                <?php endif ?>
             </div>
 
             <div class="form__row form__row--controls">

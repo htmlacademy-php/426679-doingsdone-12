@@ -5,6 +5,7 @@ $link = conect();
 $errors = [];
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $form = $_POST;
     $requireds = ['name', 'project'];
     $title_tasks = $_POST['name'];
     $projects_id = $_POST['project'];
@@ -15,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if($result){
         $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
         foreach($result as $res){
-            $projects_id = $res['id'];
+            $projects_id = (int)$res['id'];
         }
     }
     if(is_date_valid($_POST['date'])){
@@ -42,8 +43,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $file_name = NULL;
             }
         }
-        $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES ( ". user_db() .", $projects_id, '$title_tasks', '$dt_end' , '$file_name' )";
-        $stmt = mysqli_prepare($link, $sql);
+        $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES (?, ?, ?, ?, ?)";
+        $stmt = db_get_prepare_stmt($link,$sql,[user_db(),$projects_id, $form['name'],$form['date'],$file_name]);
+
+
+
         $res = mysqli_stmt_execute($stmt);
         header("Location: index.php");
     }
