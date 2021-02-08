@@ -1,3 +1,7 @@
+<?php
+  require_once('add.php');
+?>
+
     <div class="content">
       <section class="content__side">
         <h2 class="content__side-heading">Проекты</h2>
@@ -22,7 +26,7 @@
             <?php $classname =  isset($errors['name']) ? "form__input--error" : ""; ?>
             <?php if($errors['name']){ echo '<p class="form__message">';} ?>
             <label class="form__label" for="name">Название <sup>*</sup></label>
-            <input class="form__input <?= $classname?>" type="text" name="name" id="name" value="" placeholder="Введите название">
+            <input class="form__input <?= $classname?>" type="text" name="name" id="name" value="<?= $_POST['name'] ?>" placeholder="Введите название">
             <?php if($errors['name']){echo "</p>";} ?>
         </div>
 
@@ -38,9 +42,10 @@
           </div>
 
           <div class="form__row">
-            <label class="form__label" for="date">Дата выполнения</label>
-
-            <input class="form__input form__input--date" type="text" name="date" id="date" value="" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+            <?php $classname =  isset($errors['date']) ? "form__input--error" : ""; ?>
+            <?php if($errors['date']){ echo '<p class="form__message">';} ?>
+            <label class="form__label" for="date">Дата выполнения *</label>
+            <input class="form__input form__input--date <?= $classname?>" type="text" name="date" id="date" value="<?= $_POST['date'] ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
           </div>
 
           <div class="form__row">

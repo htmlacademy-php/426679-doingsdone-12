@@ -28,7 +28,7 @@ CREATE TABLE tasks (
     st_check INT(1) DEFAULT 0,
     title_task VARCHAR(128) NOT NULL,
     dl_file VARCHAR(4000) NULL,
-    dt_end DATE NULL,
+    dt_end DATE DEFAULT NULL,
     INDEX idxTasksUser (user_id),
     INDEX idxTaskProject (project_id),
     CONSTRAINT users_task_td FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,

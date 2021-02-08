@@ -1,4 +1,59 @@
 <?php
+session_start();
+$conection = conect();
+$projects = project($conection);
+$tasks = task($conection, user_db());
+$tasks_sort = sort_task($conection, $tasks, user_db());
+
+    //Подключаем базу
+    function conect(){
+        $dd_conf = mysqli_connect("localhost", "root", "root", "doingsdone");
+        if ($dd_conf == false){
+            print('Ошибка подключения: ' . mysqli_connect_error());
+            return null;
+        }
+        return $dd_conf;
+    }
+
+    //Получаем все проекты
+    function project($dd_conf){
+        $sql = "SELECT id, title_project, projects.user_id FROM projects";
+        $result = mysqli_query($dd_conf, $sql);
+        if($result){
+            return $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        }
+    }
+
+    //Получаем все задачи
+    function task($dd_conf, $user){
+        $sql = "SELECT title_task, user_id, project_id, dt_end, dl_file FROM tasks WHERE tasks.user_id = " . $user;
+        $result = mysqli_query($dd_conf, $sql);
+        if($result){
+            $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            return $tasks;
+        }
+        return null;
+    }
+
+//Заполняем список задач
+    function sort_task($dd_conf, $tasks, $user){
+        $sort = filter_input(INPUT_GET, 'sort');
+        if($sort){
+            $sql = "SELECT title_task, project_id, dt_end, tasks.user_id, projects.id FROM tasks
+            JOIN projects WHERE tasks.user_id =" . $user ." && projects.id =" . $sort . " && project_id=" . $sort;
+            $result = mysqli_query($dd_conf, $sql);
+            $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            if(!$tasks_sort){
+                http_response_code(404);
+            }
+        }
+        else {
+            $tasks_sort = $tasks;
+            return $tasks_sort;
+        }
+        return $tasks_sort;
+    }
+
     //Поиск файл и его открытие
     function include_template($name, $data){
         $name = __DIR__ . '/' . $name;
@@ -55,6 +110,72 @@
 
         return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
     }
+    //Выводим страницу добавления задачи
+    function addTaskPage($errors, $projects, $tasks){
+        $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
+        layout($page_content);
+    }
 
-    //Проет
+    //Выводим главную страницу
+    function layout($page_content){
+        $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Дела в порядке']);
+        print($layout_content);
+    }
+    //Выводим страницу регистрации
+    function register($errors, $form){
+        $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
+        layout($page_content);
+    }
+    //Формируем запрос для записи в базу
+    function db_get_prepare_stmt($link, $sql, $data = []) {
+        $stmt = mysqli_prepare($link, $sql);
+
+        if ($stmt === false) {
+            $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+            die($errorMsg);
+        }
+
+        if ($data) {
+            $types = '';
+            $stmt_data = [];
+
+            foreach ($data as $value) {
+                $type = 's';
+
+                if (is_int($value)) {
+                    $type = 'i';
+                }
+                else if (is_string($value)) {
+                    $type = 's';
+                }
+                else if (is_double($value)) {
+                    $type = 'd';
+                }
+
+                if ($type) {
+                    $types .= $type;
+                    $stmt_data[] = $value;
+                }
+            }
+
+            $values = array_merge([$stmt, $types], $stmt_data);
+
+            $func = 'mysqli_stmt_bind_param';
+            $func(...$values);
+
+            if (mysqli_errno($link) > 0) {
+                $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+                die($errorMsg);
+            }
+        }
+
+        return $stmt;
+    }
+
+    //Поиск юзера
+    function user_db(){
+        $user = 1;
+        return $user;
+    }
+
 ?>
