@@ -1,9 +1,14 @@
 <?php
 session_start();
+$userName = '';
 $conection = conect();
 $projects = project($conection);
-$tasks = task($conection, user_db());
-$tasks_sort = sort_task($conection, $tasks, user_db());
+if(isset($_SESSION['user'])){
+    $user_id = user_db($_SESSION['user']);
+    $userName = user_name($_SESSION['user']);
+    $tasks = task($conection, $user_id);
+    $tasks_sort = sort_task($conection, $tasks, $user_id);
+}
 
     //Подключаем базу
     function conect(){
@@ -39,13 +44,13 @@ $tasks_sort = sort_task($conection, $tasks, user_db());
     function sort_task($dd_conf, $tasks, $user){
         $sort = filter_input(INPUT_GET, 'sort');
         if($sort){
-            $sql = "SELECT title_task, project_id, dt_end, tasks.user_id, projects.id FROM tasks
-            JOIN projects WHERE tasks.user_id =" . $user ." && projects.id =" . $sort . " && project_id=" . $sort;
-            $result = mysqli_query($dd_conf, $sql);
-            $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            if(!$tasks_sort){
-                http_response_code(404);
-            }
+                $sql = "SELECT title_task, project_id, dt_end, tasks.user_id, projects.id FROM tasks
+                JOIN projects WHERE tasks.user_id =" . $user ." && projects.id =" . $sort . " && project_id=" . $sort;
+                $result = mysqli_query($dd_conf, $sql);
+                $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                if(!$tasks_sort){
+                    http_response_code(404);
+                }
         }
         else {
             $tasks_sort = $tasks;
@@ -113,18 +118,18 @@ $tasks_sort = sort_task($conection, $tasks, user_db());
     //Выводим страницу добавления задачи
     function addTaskPage($errors, $projects, $tasks){
         $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
-        layout($page_content);
+        layout($page_content, $userName);
     }
 
     //Выводим главную страницу
-    function layout($page_content){
-        $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Дела в порядке']);
+    function layout($page_content, $userName){
+        $layout_content = include_template('layout.php', ['userName' => $userName,'content' => $page_content, 'title' => 'Дела в порядке']);
         print($layout_content);
     }
     //Выводим страницу регистрации
     function register($errors, $form){
         $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
-        layout($page_content);
+        layout($page_content, $userName);
     }
     //Формируем запрос для записи в базу
     function db_get_prepare_stmt($link, $sql, $data = []) {
@@ -172,10 +177,20 @@ $tasks_sort = sort_task($conection, $tasks, user_db());
         return $stmt;
     }
 
-    //Поиск юзера
-    function user_db(){
-        $user = 1;
-        return $user;
+    function auth($errors){
+        $page_content = include_template('auth.php', ['errors' => $errors, 'title' => 'Дела в порядке']);
+        layout($page_content, $userName);
+    }
+
+    //Поиск id юзера
+    function user_db($users){
+        $user_id = $users['id']; 
+        return $user_id;
+    }
+
+    function user_name($users){
+        $userName = $users['username'];
+        return $userName;
     }
 
 ?>
