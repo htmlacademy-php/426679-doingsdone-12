@@ -63,6 +63,13 @@
         </tr>
         <?php endif; ?>
         <?php endforeach; ?>
+        <?php if(empty($tasks_sort)) : ?>
+            <tr class="tasks__item task">
+            <td class="task__select">
+                <span>Ничего не найдено по вашему запросу</span>
+            </td>
+            </tr>
+        <?php endif; ?>
         </table>
     </main>
 </div>
