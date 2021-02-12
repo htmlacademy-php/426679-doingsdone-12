@@ -29,6 +29,7 @@ CREATE TABLE tasks (
     title_task VARCHAR(128) NOT NULL,
     dl_file VARCHAR(4000) NULL,
     dt_end DATE DEFAULT NULL,
+    FULLTEXT (title_task),
     INDEX idxTasksUser (user_id),
     INDEX idxTaskProject (project_id),
     CONSTRAINT users_task_td FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
