@@ -12,7 +12,7 @@
         </ul>
     </nav>
     <a class="button button--transparent button--plus content__side-button"
-        href="pages/form-project.html" target="project_add">Добавить проект</a>
+        href="project.php" target="project_add">Добавить проект</a>
 </section>
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
@@ -28,8 +28,8 @@
             <a href="/" class="tasks-switch__item">Просроченные</a>
         </nav>
         <label class="checkbox">
-                <input class="checkbox__input visually-hidden show_completed"
-                type="checkbox" <?php echo $show_complete_tasks == 1 ? 'checked' : '' ?> >
+            <input class="checkbox__input visually-hidden show_completed"
+            type="checkbox" <?php echo $show_complete_tasks == 1 ? 'checked' : '' ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
@@ -47,7 +47,7 @@
         <?php endif ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden" type="checkbox" checked>
+                    <input class="checkbox__input visually-hidden" type="checkbox">
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>

@@ -2,12 +2,12 @@
 
 /**/
 require_once('templates/functions.php');
-
+$show_complete_tasks = 0;
 //Поиск задачи
 $search = $_GET['q'] ?? '';
 
 if($search){
-    $sql = "SELECT user_id, title_task, project_id, dt_end, dl_file FROM tasks " . 
+    $sql = "SELECT user_id, title_task, project_id, dt_end, dl_file FROM tasks " .
     "JOIN users ON tasks.user_id = users.id " .
     "WHERE MATCH(title_task) AGAINST(?)";
     $link = conect();

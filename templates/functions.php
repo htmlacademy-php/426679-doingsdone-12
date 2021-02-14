@@ -3,6 +3,8 @@ session_start();
 $userName = '';
 $conection = conect();
 $projects = project($conection);
+
+
 if(isset($_SESSION['user'])){
     $user_id = user_db($_SESSION['user']);
     $userName = user_name($_SESSION['user']);
@@ -31,7 +33,7 @@ if(isset($_SESSION['user'])){
 
     //Получаем все задачи
     function task($dd_conf, $user){
-        $sql = "SELECT title_task, user_id, project_id, dt_end, dl_file FROM tasks WHERE tasks.user_id = " . $user;
+        $sql = "SELECT * FROM tasks WHERE tasks.user_id = " . $user;
         $result = mysqli_query($dd_conf, $sql);
         if($result){
             $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -121,6 +123,11 @@ if(isset($_SESSION['user'])){
         layout($page_content, $userName);
     }
 
+    function addProjectPage($errors, $projects, $tasks) {
+        $page_content = include_template('addProject.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
+        layout($page_content, $userName);
+    }
+
     //Выводим главную страницу
     function layout($page_content, $userName){
         $layout_content = include_template('layout.php', ['userName' => $userName,'content' => $page_content, 'title' => 'Дела в порядке']);
@@ -184,7 +191,7 @@ if(isset($_SESSION['user'])){
 
     //Поиск id юзера
     function user_db($users){
-        $user_id = $users['id']; 
+        $user_id = $users['id'];
         return $user_id;
     }
 
@@ -192,5 +199,29 @@ if(isset($_SESSION['user'])){
         $userName = $users['username'];
         return $userName;
     }
+
+    function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+{
+    $number = (int) $number;
+    $mod10 = $number % 10;
+    $mod100 = $number % 100;
+
+    switch (true) {
+        case ($mod100 >= 11 && $mod100 <= 20):
+            return $many;
+
+        case ($mod10 > 5):
+            return $many;
+
+        case ($mod10 === 1):
+            return $one;
+
+        case ($mod10 >= 2 && $mod10 <= 4):
+            return $two;
+
+        default:
+            return $many;
+    }
+}
 
 ?>
