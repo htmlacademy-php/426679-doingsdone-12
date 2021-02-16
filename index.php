@@ -2,7 +2,7 @@
 
 /**/
 require_once('templates/functions.php');
-$show_complete_tasks = 0;
+$show_complete_tasks = 1;
 //Поиск задачи
 $search = $_GET['q'] ?? '';
 

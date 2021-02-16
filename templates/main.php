@@ -12,7 +12,7 @@
         </ul>
     </nav>
     <a class="button button--transparent button--plus content__side-button"
-        href="project.php" target="project_add">Добавить проект</a>
+        href="project.php">Добавить проект</a>
 </section>
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
