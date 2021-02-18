@@ -1,6 +1,6 @@
 <?php
 session_start();
-$userName = '';
+$userName = null;
 $conection = conect();
 $projects = project($conection);
 

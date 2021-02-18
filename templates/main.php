@@ -34,8 +34,8 @@
         </label>
     </div>
     <table class="tasks">
-        <?php foreach($tasks_sort as $task): ?>
-        <?php if ($task['st_check'] && $show_complete_tasks == 0) : ?>
+        <?php foreach($tasks_sort as $task): ?>   
+        <?php if ($task['st_check'] == 1 && $show_complete_tasks == 0) : ?>
         <?php continue; ?>
         <?php else: ?>
         <tr class="tasks__item task <?php echo $task['st_check'] ? 'task--completed' : ''?>
@@ -47,7 +47,7 @@
         <?php endif ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden" type="checkbox">
+                    <input class="checkbox__input task__checkbox visually-hidden " <?php echo $tasks_complete = $_SESSION['tasks'] ? 'checked' : '' ?> type="checkbox" value = "<?=$task['id'] ?>">
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>

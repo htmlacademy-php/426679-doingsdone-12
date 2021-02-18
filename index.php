@@ -2,8 +2,20 @@
 
 /**/
 require_once('templates/functions.php');
-$show_complete_tasks = 1;
+$show_completed = (int) $_GET['show_completed'];
 //Поиск задачи
+
+
+if (isset($_GET['show_completed'])) {
+    $show_complete_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_VALIDATE_INT);
+    $_SESSION['show_complete_tasks'] = $show_complete_tasks;
+};
+
+if (empty($_GET['tasks'])) {
+    $tasks_completed = filter_input(INPUT_GET, 'check', FILTER_VALIDATE_INT);
+    $_SESSION['tasks'] = $tasks_completed;
+};
+
 $search = $_GET['q'] ?? '';
 
 if($search){
