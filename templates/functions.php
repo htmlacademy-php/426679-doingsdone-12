@@ -46,7 +46,7 @@ if(isset($_SESSION['user'])){
     function sort_task($dd_conf, $tasks, $user){
         $sort = filter_input(INPUT_GET, 'sort');
         if($sort){
-                $sql = "SELECT title_task, project_id, dt_end, tasks.user_id, projects.id FROM tasks
+                $sql = "SELECT * FROM tasks
                 JOIN projects WHERE tasks.user_id =" . $user ." && projects.id =" . $sort . " && project_id=" . $sort;
                 $result = mysqli_query($dd_conf, $sql);
                 $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);

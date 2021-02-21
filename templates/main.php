@@ -47,7 +47,11 @@
         <?php endif ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input task__checkbox visually-hidden " <?php echo $tasks_complete = $_SESSION['tasks'] ? 'checked' : '' ?> type="checkbox" value = "<?=$task['id'] ?>">
+                    <input class="checkbox__input task__checkbox visually-hidden" 
+                    <?php  if($_SESSION['tasks'] == 1 && $_SESSION['task_id'] == $task['id']) :?> 
+                    checked
+                    <?php endif;?>
+                    type="checkbox" value = "<?=$task['id']?>">
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>
