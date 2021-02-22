@@ -29,16 +29,16 @@
         </nav>
         <label class="checkbox">
             <input class="checkbox__input visually-hidden show_completed"
-            type="checkbox" <?php echo $show_complete_tasks == 1 ? 'checked' : '' ?>>
+            type="checkbox" <?php echo $_SESSION['show_complete_tasks'] == 1 ? 'checked' : '' ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
     <table class="tasks">
-        <?php foreach($tasks_sort as $task): ?>   
-        <?php if ($task['st_check'] == 1 && $show_complete_tasks == 0) : ?>
+        <?php foreach($tasks_sort as $task): ?>
+        <?php if ($task['st_check'] == 1 && $_SESSION['show_complete_tasks'] == 0) : ?>
         <?php continue; ?>
         <?php else: ?>
-        <tr class="tasks__item task <?php echo $task['st_check'] ? 'task--completed' : ''?>
+        <tr class="tasks__item task <?php echo $task['st_check'] == 1 ? 'task--completed' : ''?>
         <!-- Считаем часы до завершения -->
         <?php if ($task['dt_end'] == 'null' || $task['st_check']) : ?>
             ''
@@ -47,10 +47,8 @@
         <?php endif ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input task__checkbox visually-hidden" 
-                    <?php  if($_SESSION['tasks'] == 1 && $_SESSION['task_id'] == $task['id']) :?> 
-                    checked
-                    <?php endif;?>
+                    <input class="checkbox__input task__checkbox visually-hidden"
+                    <?php echo  $task['st_check'] == 1  ? 'checked': '';?>
                     type="checkbox" value = "<?=$task['id']?>">
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>

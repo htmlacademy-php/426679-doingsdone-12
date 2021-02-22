@@ -1,15 +1,18 @@
 <?php
 session_start();
 $userName = null;
+$user_id = null;
 $conection = conect();
-$projects = project($conection);
+
 
 
 if(isset($_SESSION['user'])){
     $user_id = user_db($_SESSION['user']);
     $userName = user_name($_SESSION['user']);
+    $projects = project($conection, $user_id);
     $tasks = task($conection, $user_id);
     $tasks_sort = sort_task($conection, $tasks, $user_id);
+
 }
 
     //Подключаем базу
@@ -23,8 +26,8 @@ if(isset($_SESSION['user'])){
     }
 
     //Получаем все проекты
-    function project($dd_conf){
-        $sql = "SELECT id, title_project, projects.user_id FROM projects";
+    function project($dd_conf, $user_id){
+        $sql = "SELECT id, title_project, projects.user_id FROM projects WHERE user_id = " . $user_id;
         $result = mysqli_query($dd_conf, $sql);
         if($result){
             return $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -120,12 +123,12 @@ if(isset($_SESSION['user'])){
     //Выводим страницу добавления задачи
     function addTaskPage($errors, $projects, $tasks){
         $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
-        layout($page_content, $userName);
+        layout($page_content, $_SESSION['user']);
     }
 
     function addProjectPage($errors, $projects, $tasks) {
         $page_content = include_template('addProject.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
-        layout($page_content, $userName);
+        layout($page_content, $_SESSION['user']);
     }
 
     //Выводим главную страницу
@@ -136,7 +139,7 @@ if(isset($_SESSION['user'])){
     //Выводим страницу регистрации
     function register($errors, $form){
         $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
-        layout($page_content, $userName);
+        layout($page_content,$_SESSION['user']);
     }
     //Формируем запрос для записи в базу
     function db_get_prepare_stmt($link, $sql, $data = []) {

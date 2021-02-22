@@ -4,22 +4,20 @@
 require_once('templates/functions.php');
 $link = conect();
 $show_completed = (int) $_GET['show_completed'];
-//Поиск задачи
-
 
 if (isset($_GET['show_completed'])) {
     $show_complete_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_VALIDATE_INT);
     $_SESSION['show_complete_tasks'] = $show_complete_tasks;
 };
 
-if (empty($_GET['show_tasks'])) {
-    $tasks_completed = filter_input(INPUT_GET, 'check', FILTER_VALIDATE_INT);
-    $task_id = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
-    $_SESSION['tasks'] = $tasks_completed;
-    $_SESSION['task_id'] = $task_id;
+if (isset($_GET['check'])) {
+        $tasks_completed = filter_input(INPUT_GET, 'check', FILTER_VALIDATE_INT);
+        $task_id = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
+        $_SESSION['tasks'] = $tasks_completed;
+        $_SESSION['task_id'] = $task_id;
 };
 
-if(empty($_GET['tasks_id'])){
+if(isset($_GET['task_id'])){
     $task_id = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
     foreach ($tasks as $value){
         if($value['id']== $task_id){
@@ -27,18 +25,18 @@ if(empty($_GET['tasks_id'])){
         }
     }
     mysqli_query($link, "START TRANSACTION");
-    $t1 = mysqli_query($link,"UPDATE tasks SET st_check = st_check + 1 WHERE id = " . $task_id);
-    $t2 = mysqli_query($link, "INSERT INTO tasks (st_check, title_task) VALUES ({$_SESSION['tasks']}, '$task_title')");
-    if($t1 && $t2){
+    $sql = "UPDATE tasks SET st_check = " . $_SESSION['tasks'] . " WHERE id = " . $task_id;
+    $t1 = mysqli_query($link, $sql);
+    if($t1){
         mysqli_query($link, "COMMIT");
     }
     else {
         mysqli_query($link, "ROLLBACK");
     }
-    
+    header("Location: index.php");
 }
 
-
+//Поиск задачи
 $search = $_GET['q'] ?? '';
 
 if($search){
