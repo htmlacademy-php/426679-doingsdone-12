@@ -46,8 +46,8 @@ if(isset($_SESSION['user'])){
                     $file_name = NULL;
                 }
             }
-            $sql = "INSERT INTO tasks (user_id, project_id, title_task, dt_end, dl_file) VALUES (?, ?, ?, ?, ?)";
-            $stmt = db_get_prepare_stmt($link,$sql,[$user_id,$projects_id, $form['name'],$form['date'],$file_name]);
+            $sql = "INSERT INTO tasks (user_id, dt_task, project_id, title_task, dt_end, dl_file) VALUES (?, NOW(), ?, ?, ?, ?)";
+            $stmt = db_get_prepare_stmt($link,$sql,[$user_id, $projects_id, $form['name'],$form['date'],$file_name]);
             $res = mysqli_stmt_execute($stmt);
             header("Location: index.php");
         }

@@ -36,6 +36,7 @@ if(isset($_GET['task_id'])){
     header("Location: index.php");
 }
 
+
 //Поиск задачи
 $search = $_GET['q'] ?? '';
 
@@ -60,6 +61,13 @@ if($search){
     }
 }
 
+$sort_date = filter_input(INPUT_GET, 'sort_date');
+if($sort_date == "Повестка дня"){
+    $sql = "SELECT * FROM tasks WHERE dt_task > DATE_SUB(NOW(), INTERVAL 1 DAY)";
+    $result = mysqli_query($link, $sql);
+    $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 //Добавляем задачу
 if (isset($_SESSION['user'])) {
     $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
@@ -67,8 +75,6 @@ if (isset($_SESSION['user'])) {
 else {
     $page_content = include_template('guest.php',['errors' => $errors]);
 }
-
-
 
 layout($page_content,$userName);
 

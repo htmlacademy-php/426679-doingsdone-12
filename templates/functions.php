@@ -4,15 +4,12 @@ $userName = null;
 $user_id = null;
 $conection = conect();
 
-
-
 if(isset($_SESSION['user'])){
     $user_id = user_db($_SESSION['user']);
     $userName = user_name($_SESSION['user']);
     $projects = project($conection, $user_id);
     $tasks = task($conection, $user_id);
     $tasks_sort = sort_task($conection, $tasks, $user_id);
-
 }
 
     //Подключаем базу
@@ -85,7 +82,7 @@ if(isset($_SESSION['user'])){
         $intElement = 0;
         print($values['id']);
             foreach($values as $value){
-                if($value['project_id'] == $elements['user_id']){
+                if($value['project_id'] == $elements['id']){
                     $intElement++;
                 }
             }
@@ -109,7 +106,7 @@ if(isset($_SESSION['user'])){
 
     //Формируем ссылку
     function add_Link($value){
-        $element = '?tab=' . $value['title_project'] . '&sort=' . $value['user_id'];
+        $element = '?tab=' . $value['title_project'] . '&sort=' . $value['id'];
         return $element;
     }
 
