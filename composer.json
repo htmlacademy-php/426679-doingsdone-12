@@ -1,0 +1,13 @@
+{
+    "name": "artem/doingsdone",
+    "description": "doingsdone",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Artem Shomin",
+            "email": "artemshomin@gmail.com"
+        }
+    ],
+    "minimum-stability": "RC",
+    "require": {}
+}

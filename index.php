@@ -61,16 +61,30 @@ if($search){
     }
 }
 
+//Сортировка даты
 $sort_date = filter_input(INPUT_GET, 'sort_date');
 if($sort_date == "Повестка дня"){
-    $sql = "SELECT * FROM tasks WHERE dt_task > DATE_SUB(NOW(), INTERVAL 1 DAY)";
+    $sql = "SELECT * FROM tasks WHERE DATE(dt_end)=CURRENT_DATE()";
     $result = mysqli_query($link, $sql);
     $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+elseif($sort_date == "Завтра"){
+    $sql = "SELECT * FROM tasks WHERE dt_end = DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
+    $result = mysqli_query($link, $sql);
+    $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+elseif($sort_date == "Просроченные"){
+    $sql = "SELECT * FROM tasks WHERE dt_end < CURRENT_DATE()";
+    $result = mysqli_query($link, $sql);
+    $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+else {
+    $sort_date = "Все задачи";
 }
 
 //Добавляем задачу
 if (isset($_SESSION['user'])) {
-    $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks]);
+    $page_content = include_template('main.php', ['projects' => $projects, 'tasks' => $tasks, 'tasks_sort' => $tasks_sort, 'sort' => $sort, 'show_complete_tasks' => $show_complete_tasks, 'sort_date' => $sort_date]);
 }
 else {
     $page_content = include_template('guest.php',['errors' => $errors]);
