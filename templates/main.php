@@ -12,7 +12,7 @@
         </ul>
     </nav>
     <a class="button button--transparent button--plus content__side-button"
-        href="pages/form-project.html" target="project_add">Добавить проект</a>
+        href="project.php">Добавить проект</a>
 </section>
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
@@ -23,22 +23,22 @@
     <div class="tasks-controls">
         <nav class="tasks-switch">
             <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-            <a href="/" class="tasks-switch__item">Повестка дня</a>
-            <a href="/" class="tasks-switch__item">Завтра</a>
-            <a href="/" class="tasks-switch__item">Просроченные</a>
+            <a href="/?sort_date=Повестка дня" class="tasks-switch__item">Повестка дня</a>
+            <a href="" class="tasks-switch__item">Завтра</a>
+            <a href="" class="tasks-switch__item">Просроченные</a>
         </nav>
         <label class="checkbox">
-                <input class="checkbox__input visually-hidden show_completed"
-                type="checkbox" <?php echo $show_complete_tasks == 1 ? 'checked' : '' ?> >
+            <input class="checkbox__input visually-hidden show_completed"
+            type="checkbox" <?php echo $_SESSION['show_complete_tasks'] == 1 ? 'checked' : '' ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
     <table class="tasks">
         <?php foreach($tasks_sort as $task): ?>
-        <?php if ($task['st_check'] && $show_complete_tasks == 0) : ?>
+        <?php if ($task['st_check'] == 1 && $_SESSION['show_complete_tasks'] == 0) : ?>
         <?php continue; ?>
         <?php else: ?>
-        <tr class="tasks__item task <?php echo $task['st_check'] ? 'task--completed' : ''?>
+        <tr class="tasks__item task <?php echo $task['st_check'] == 1 ? 'task--completed' : ''?>
         <!-- Считаем часы до завершения -->
         <?php if ($task['dt_end'] == 'null' || $task['st_check']) : ?>
             ''
@@ -47,7 +47,9 @@
         <?php endif ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden" type="checkbox" checked>
+                    <input class="checkbox__input task__checkbox visually-hidden"
+                    <?php echo  $task['st_check'] == 1  ? 'checked': '';?>
+                    type="checkbox" value = "<?=$task['id']?>">
                     <span class="checkbox__text"><?= filterEsc($task['title_task']); ?></span>
                 </label>
             </td>

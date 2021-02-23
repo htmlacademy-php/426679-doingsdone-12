@@ -1,11 +1,13 @@
 <?php
 session_start();
-$userName = '';
+$userName = null;
+$user_id = null;
 $conection = conect();
-$projects = project($conection);
+
 if(isset($_SESSION['user'])){
     $user_id = user_db($_SESSION['user']);
     $userName = user_name($_SESSION['user']);
+    $projects = project($conection, $user_id);
     $tasks = task($conection, $user_id);
     $tasks_sort = sort_task($conection, $tasks, $user_id);
 }
@@ -21,8 +23,8 @@ if(isset($_SESSION['user'])){
     }
 
     //Получаем все проекты
-    function project($dd_conf){
-        $sql = "SELECT id, title_project, projects.user_id FROM projects";
+    function project($dd_conf, $user_id){
+        $sql = "SELECT id, title_project, projects.user_id FROM projects WHERE user_id = " . $user_id;
         $result = mysqli_query($dd_conf, $sql);
         if($result){
             return $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -31,7 +33,7 @@ if(isset($_SESSION['user'])){
 
     //Получаем все задачи
     function task($dd_conf, $user){
-        $sql = "SELECT title_task, user_id, project_id, dt_end, dl_file FROM tasks WHERE tasks.user_id = " . $user;
+        $sql = "SELECT * FROM tasks WHERE tasks.user_id = " . $user;
         $result = mysqli_query($dd_conf, $sql);
         if($result){
             $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -44,7 +46,7 @@ if(isset($_SESSION['user'])){
     function sort_task($dd_conf, $tasks, $user){
         $sort = filter_input(INPUT_GET, 'sort');
         if($sort){
-                $sql = "SELECT title_task, project_id, dt_end, tasks.user_id, projects.id FROM tasks
+                $sql = "SELECT * FROM tasks
                 JOIN projects WHERE tasks.user_id =" . $user ." && projects.id =" . $sort . " && project_id=" . $sort;
                 $result = mysqli_query($dd_conf, $sql);
                 $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -80,7 +82,7 @@ if(isset($_SESSION['user'])){
         $intElement = 0;
         print($values['id']);
             foreach($values as $value){
-                if($value['project_id'] == $elements['user_id']){
+                if($value['project_id'] == $elements['id']){
                     $intElement++;
                 }
             }
@@ -104,7 +106,7 @@ if(isset($_SESSION['user'])){
 
     //Формируем ссылку
     function add_Link($value){
-        $element = '?tab=' . $value['title_project'] . '&sort=' . $value['user_id'];
+        $element = '?tab=' . $value['title_project'] . '&sort=' . $value['id'];
         return $element;
     }
 
@@ -118,7 +120,12 @@ if(isset($_SESSION['user'])){
     //Выводим страницу добавления задачи
     function addTaskPage($errors, $projects, $tasks){
         $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
-        layout($page_content, $userName);
+        layout($page_content, $_SESSION['user']);
+    }
+
+    function addProjectPage($errors, $projects, $tasks) {
+        $page_content = include_template('addProject.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
+        layout($page_content, $_SESSION['user']);
     }
 
     //Выводим главную страницу
@@ -129,7 +136,7 @@ if(isset($_SESSION['user'])){
     //Выводим страницу регистрации
     function register($errors, $form){
         $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
-        layout($page_content, $userName);
+        layout($page_content,$_SESSION['user']);
     }
     //Формируем запрос для записи в базу
     function db_get_prepare_stmt($link, $sql, $data = []) {
@@ -184,7 +191,7 @@ if(isset($_SESSION['user'])){
 
     //Поиск id юзера
     function user_db($users){
-        $user_id = $users['id']; 
+        $user_id = $users['id'];
         return $user_id;
     }
 
@@ -192,5 +199,29 @@ if(isset($_SESSION['user'])){
         $userName = $users['username'];
         return $userName;
     }
+
+    function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+{
+    $number = (int) $number;
+    $mod10 = $number % 10;
+    $mod100 = $number % 100;
+
+    switch (true) {
+        case ($mod100 >= 11 && $mod100 <= 20):
+            return $many;
+
+        case ($mod10 > 5):
+            return $many;
+
+        case ($mod10 === 1):
+            return $one;
+
+        case ($mod10 >= 2 && $mod10 <= 4):
+            return $two;
+
+        default:
+            return $many;
+    }
+}
 
 ?>
