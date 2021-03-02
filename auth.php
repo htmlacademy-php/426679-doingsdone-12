@@ -3,7 +3,7 @@
     $link = conect();
     $errors= [];
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form = $_POST;
         $required = ['email', 'password'];
 
@@ -14,8 +14,8 @@
         }
         $email = mysqli_real_escape_string($link, $form['email']);
 
-        if(empty($errors)){
-            if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+        if (empty($errors)) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $sql = "SELECT * FROM users WHERE email = '$email'";
                 $result = mysqli_query($link, $sql);
@@ -28,11 +28,9 @@
                         exit();
                     }
                 }
-            }
-            else {
+            } else {
                 $errors['email'] = 'Проверьте написание Email';
             }
         }
     }
     auth($errors);
-?>
