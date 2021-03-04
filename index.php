@@ -3,12 +3,19 @@
 /**/
 require_once('templates/functions.php');
 $link = conect();
-$show_completed = (int) $_GET['show_completed'];
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+$show_complete_tasks = 0;
+$show_completed = null;
+$sort = null;
+$errors = null;
 
 if (isset($_GET['show_completed'])) {
+    $show_completed = (int) $_GET['show_completed'];
     $show_complete_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_VALIDATE_INT);
     $_SESSION['show_complete_tasks'] = $show_complete_tasks;
-};
+}
 
 if (isset($_GET['check'])) {
     $tasks_completed = filter_input(INPUT_GET, 'check', FILTER_VALIDATE_INT);
@@ -63,15 +70,15 @@ if ($search) {
 //Сортировка даты
 $sort_date = filter_input(INPUT_GET, 'sort_date');
 if ($sort_date == "Повестка дня") {
-    $sql = "SELECT * FROM tasks WHERE DATE(dt_end)=CURRENT_DATE()";
+    $sql = "SELECT * FROM tasks WHERE user_id = " . $user_id . " && DATE(dt_end)=CURRENT_DATE()";
     $result = mysqli_query($link, $sql);
     $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } elseif ($sort_date == "Завтра") {
-    $sql = "SELECT * FROM tasks WHERE dt_end = DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
+    $sql = "SELECT * FROM tasks WHERE user_id = " . $user_id . " && dt_end = DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
     $result = mysqli_query($link, $sql);
     $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } elseif ($sort_date == "Просроченные") {
-    $sql = "SELECT * FROM tasks WHERE dt_end < CURRENT_DATE()";
+    $sql = "SELECT * FROM tasks WHERE user_id = " . $user_id . " && dt_end < CURRENT_DATE()";
     $result = mysqli_query($link, $sql);
     $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } else {
@@ -85,7 +92,7 @@ if (isset($_SESSION['user'])) {
     $page_content = include_template('guest.php', ['errors' => $errors]);
 }
 
-layout($page_content, $userName);
+layout($page_content);
 
 ?>
 
