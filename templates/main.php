@@ -22,10 +22,10 @@
         </form>
     <div class="tasks-controls">
         <nav class="tasks-switch">
-            <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-            <a href="/?sort_date=Повестка дня" class="tasks-switch__item">Повестка дня</a>
-            <a href="" class="tasks-switch__item">Завтра</a>
-            <a href="" class="tasks-switch__item">Просроченные</a>
+            <a href="/?sort_date=Все задачи" class="tasks-switch__item <?php echo ($sort_date == "Все задачи")? 'tasks-switch__item--active' : ''?>">Все задачи</a>
+            <a href="/?sort_date=Повестка дня" class="tasks-switch__item <?php echo ($sort_date == "Повестка дня")? 'tasks-switch__item--active' : ''?>">Повестка дня</a>
+            <a href="/?sort_date=Завтра" class="tasks-switch__item <?php echo ($sort_date == "Завтра")? 'tasks-switch__item--active' : ''?>">Завтра</a>
+            <a href="/?sort_date=Просроченные" class="tasks-switch__item <?php echo ($sort_date == "Просроченные")? 'tasks-switch__item--active' : ''?>">Просроченные</a>
         </nav>
         <label class="checkbox">
             <input class="checkbox__input visually-hidden show_completed"
