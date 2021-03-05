@@ -1,11 +1,13 @@
 <?php
+/**
+*Почтовая рассылка с напоминанием
+*
+*/
 
 require_once('templates/functions.php');
 require('vendor/autoload.php');
 $link = conect();
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+
 //Конфигурациятранспорта
 $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
 $transport->setUsername("keks@phpdemo.ru");
