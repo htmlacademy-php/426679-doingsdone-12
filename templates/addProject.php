@@ -20,16 +20,17 @@
 <div class="container">
       <main class="content__main">
         <h2 class="content__main-heading">Добавление проекта</h2>
-
         <form class="form"  action="" method="post" autocomplete="off">
           <div class="form__row">
-          <?php if($errors['name']){ echo '<p class="form__message">';} ?>
+            <?= !empty($errors['name']) ? '<p class="form__message">' : '' ?>
             <label class="form__label" for="project_name">Название <sup>*</sup></label>
             <?php $classname =  isset($errors['name']) ? "form__input--error" : ""; ?>
             <input class="form__input <?= $classname?>" type="text" name="name" id="project_name" value="" placeholder="Введите название проекта">
-            <?php if($errors['name']){echo "</p>";} ?>
-            <?php if($errors['name']== 'Проект существует'): ?>
-                <p class="form__message">Проект существует</p>
+            <?= !empty($errors['name']) ? '</p>' : '' ?>
+            <?php if (isset($errors['name'])) : ?>
+                <?php if ($errors['name']== 'Проект существует'): ?>
+                    <p class="form__message">Проект существует</p>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
 

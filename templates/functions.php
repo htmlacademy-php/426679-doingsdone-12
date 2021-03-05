@@ -12,7 +12,11 @@ if (isset($_SESSION['user'])) {
     $tasks_sort = sort_task($conection, $tasks, $user_id);
 }
 
-    //Подключаем базу
+    /**
+    * Подключаем базу
+    *
+    * @return mysqli Ресурс соединения
+    */
     function conect()
     {
         $dd_conf = mysqli_connect("localhost", "root", "root", "doingsdone");
@@ -23,7 +27,14 @@ if (isset($_SESSION['user'])) {
         return $dd_conf;
     }
 
-    //Получаем все проекты
+    /**
+    * Получаем все проекты
+    * у авторизованного пользователя
+    * @param string $dd_conf База данных
+    * @param integer $user_id ID пользователя
+    *
+    * @return string $projects Возвращаем все проеты
+    */
     function project($dd_conf, $user_id)
     {
         $sql = "SELECT id, title_project, projects.user_id FROM projects WHERE user_id = " . $user_id;
@@ -33,10 +44,18 @@ if (isset($_SESSION['user'])) {
         }
     }
 
-    //Получаем все задачи
-    function task($dd_conf, $user)
+    /**
+    * Получаем все задачи
+    * у авторизованного пользователя
+    * @param string $dd_conf База данных
+    * @param integer $user_id ID пользователя
+    *
+    * @return array $tasks Возвращаем все задачи
+    * @return null Пустые записи
+    */
+    function task($dd_conf, $user_id)
     {
-        $sql = "SELECT * FROM tasks WHERE tasks.user_id = " . $user;
+        $sql = "SELECT * FROM tasks WHERE tasks.user_id = " . $user_id;
         $result = mysqli_query($dd_conf, $sql);
         if ($result) {
             $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -45,13 +64,21 @@ if (isset($_SESSION['user'])) {
         return null;
     }
 
-//Заполняем список задач
-    function sort_task($dd_conf, $tasks, $user)
+    /**
+    * Выполняем сортировку всех записей
+    * авторизованных пользователей
+    * @param string $dd_conf База данных
+    * @param string $tasks Все записи задач
+    * @param integer $user_id ID пользователя
+    *
+    * @return array $tasks_sort Возвращаем отсортированные задачи
+    */
+    function sort_task($dd_conf, $tasks, $user_id)
     {
         $sort = filter_input(INPUT_GET, 'sort');
         if ($sort) {
             $sql = "SELECT * FROM tasks
-                JOIN projects WHERE tasks.user_id =" . $user ." && projects.id =" . $sort . " && project_id=" . $sort;
+                JOIN projects WHERE tasks.user_id =" . $user_id ." && projects.id =" . $sort . " && project_id=" . $sort;
             $result = mysqli_query($dd_conf, $sql);
             $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
             if (!$tasks_sort) {
@@ -64,7 +91,13 @@ if (isset($_SESSION['user'])) {
         return $tasks_sort;
     }
 
-    //Поиск файл и его открытие
+    /**
+    * Поиск файл и его открытие
+    * @param string $name имя файла
+    * @param array $data Массив с параметрами
+    *
+    * @return string $result Возвращаем страницу
+    */
     function include_template($name, $data)
     {
         $name = __DIR__ . '/' . $name;
@@ -81,11 +114,16 @@ if (isset($_SESSION['user'])) {
         return $result;
     }
 
-    //Подсчет проектов
+    /**
+    * Подсчет проектов
+    * @param array $elements Массив с параметрами пользователя
+    * @param array $values Массив с проектами
+    *
+    * @return integer $intElement Возвращаем число задач
+    */
     function countElements(array $elements, array $values)
     {
         $intElement = 0;
-        print($values['id']);
         foreach ($values as $value) {
             if ($value['project_id'] == $elements['id']) {
                 $intElement++;
@@ -93,32 +131,52 @@ if (isset($_SESSION['user'])) {
         }
         return $intElement;
     };
-
-    //Фильтр на символы
+    /**
+    * Фильтр на символы
+    * @param string $str Строка без очистки от сисмволов
+    *
+    * @return string $text Возвращаем очищенную строку
+    */
     function filterEsc($str)
     {
         $text = htmlspecialchars($str);
         return $text;
     }
 
-    //Считаем часы до завершения
+    /**
+    * Считаем время до завершения
+    * @param string $received_date Строка с датой
+    *
+    * @return float $day Возвращаем дни
+    */
     function date_complit($received_date)
     {
         $ts = time();
         $secs_in_day = 86400;
         $end_ts = strtotime($received_date);
-        $hours = floor(($end_ts - $ts) / 3600);
-        return $hours;
+        $day = floor(($end_ts - $ts) / 3600);
+        return $day;
     };
 
-    //Формируем ссылку
+    /**
+    * Формируем ссылку
+    * @param array $value Массив с данными о пользовате
+    *
+    * @return string $element Возвращаем готовую ссылку
+    */
     function add_Link($value)
     {
         $element = '?tab=' . $value['title_project'] . '&sort=' . $value['id'];
         return $element;
     }
 
-    //Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
+    /**
+    * Проверяет переданную дату
+    * на соответствие формату 'ГГГГ-ММ-ДД'
+    * @param string $date Массив с данными о пользовате
+    *
+    * @return string $element Возвращаем готовую ссылку
+    */
     function is_date_valid(string $date) : bool
     {
         $format_to_check = 'Y-m-d';
@@ -126,32 +184,77 @@ if (isset($_SESSION['user'])) {
 
         return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
     }
-    //Выводим страницу добавления задачи
+
+    /**
+    * Собираем страница добавления задачи
+    *
+    * @param array $errors Массив с ошибками
+    * @param array $projects Массив с проектами
+    * @param array $tasks Массив с задачами
+    *
+    */
     function addTaskPage($errors, $projects, $tasks)
     {
         $page_content = include_template('addTask.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
         layout($page_content, $_SESSION['user']);
     }
 
+    /**
+    * Собираем страница с добавлением проектов
+    *
+    * @param array $errors Массив с ошибками
+    * @param array $projects Массив с проектами
+    * @param array $tasks Массив с задачами
+    *
+    */
     function addProjectPage($errors, $projects, $tasks)
     {
         $page_content = include_template('addProject.php', ['errors' => $errors, 'projects' => $projects,'tasks' => $tasks]);
         layout($page_content, $_SESSION['user']);
     }
 
-    //Выводим главную страницу
-    function layout($page_content, $userName)
+    /**
+    * Выводим главную страницу
+    *
+    * @param array $page_content Собранная страница
+    *
+    */
+    function layout($page_content)
     {
+        $userName = null;
+        if (isset($_SESSION['user'])) {
+            $userName = $_SESSION['user'];
+        }
         $layout_content = include_template('layout.php', ['userName' => $userName,'content' => $page_content, 'title' => 'Дела в порядке']);
         print($layout_content);
     }
-    //Выводим страницу регистрации
+
+    /**
+    * Собираем страницу регистрации
+    *
+    * @param array $errors Массив с ошибками
+    * @param array $form Массив с данными из формы регистрации
+    *
+    */
     function register($errors, $form)
     {
+        $userName = null;
+        if (isset($_SESSION['user'])) {
+            $userName = $_SESSION['user'];
+        }
         $page_content = include_template('addRegister.php', ['errors' => $errors, 'form' => $form ]);
-        layout($page_content, $_SESSION['user']);
+        layout($page_content, $userName);
     }
-    //Формируем запрос для записи в базу
+
+    /**
+    * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
+    *
+    * @param mysqli $link Ресурс соединения
+    * @param string $sql SQL запрос с плейсхолдерами вместо значений
+    * @param array $data Данные для вставки на место плейсхолдеров
+    *
+    * @return mysqli_stmt Подготовленное выражение
+    */
     function db_get_prepare_stmt($link, $sql, $data = [])
     {
         $stmt = mysqli_prepare($link, $sql);
@@ -196,46 +299,41 @@ if (isset($_SESSION['user'])) {
         return $stmt;
     }
 
+
+    /**
+    * Собираем страницу авторизации
+    *
+    * @param array $errors Массив с ошибками
+    *
+    */
     function auth($errors)
     {
         $page_content = include_template('auth.php', ['errors' => $errors, 'title' => 'Дела в порядке']);
-        layout($page_content, $userName);
+        layout($page_content);
     }
 
-    //Поиск id юзера
+    /**
+    * Поиск id пользователя
+    *
+    * @param array $users Массив с информацией о пользователе
+    *
+    * @return string Возвращаем ID пользовотеля
+    */
     function user_db($users)
     {
         $user_id = $users['id'];
         return $user_id;
     }
 
+    /**
+    * Поиск имени пользователя
+    *
+    * @param array $users Массив с информацией о пользователе
+    *
+    * @return string Возвращаем имя пользовотеля
+    */
     function user_name($users)
     {
         $userName = $users['username'];
         return $userName;
     }
-
-    function get_noun_plural_form(int $number, string $one, string $two, string $many): string
-    {
-        $number = (int) $number;
-        $mod10 = $number % 10;
-        $mod100 = $number % 100;
-
-        switch (true) {
-        case ($mod100 >= 11 && $mod100 <= 20):
-            return $many;
-
-        case ($mod10 > 5):
-            return $many;
-
-        case ($mod10 === 1):
-            return $one;
-
-        case ($mod10 >= 2 && $mod10 <= 4):
-            return $two;
-
-        default:
-            return $many;
-    }
-    }
-?>
