@@ -16,23 +16,22 @@
         }
         $email = mysqli_real_escape_string($link, $form['email']);
 
-        if (empty($errors)) {
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $sql = "SELECT * FROM users WHERE email = '$email'";
-                $result = mysqli_query($link, $sql);
 
-                $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
-                if ($user) {
-                    if (password_verify($form['password'], $user['password'])) {
-                        $_SESSION['user'] = $user;
-                        header("Location: index.php");
-                        exit();
-                    }
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $sql = "SELECT * FROM users WHERE email = '$email'";
+            $result = mysqli_query($link, $sql);
+
+            $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
+            if ($user) {
+                if (password_verify($form['password'], $user['password'])) {
+                    $_SESSION['user'] = $user;
+                    header("Location: index.php");
+                    exit();
                 }
-            } else {
-                $errors['email'] = 'Проверьте написание Email';
             }
+        } else {
+            $errors['email'] = 'Проверьте написание Email';
         }
     }
     auth($errors);

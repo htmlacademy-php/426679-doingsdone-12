@@ -24,15 +24,14 @@
         <form class="form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
           <div class="form__row">
             <?php $classname =  isset($errors['name']) ? "form__input--error" : ""; ?>
-            <?php if($errors['name']){ echo '<p class="form__message">';} ?>
+            <?= !empty($errors['name']) ? '<p class="form__message">' : '' ?>
             <label class="form__label" for="name">Название <sup>*</sup></label>
-            <input class="form__input <?= $classname?>" type="text" name="name" id="name" value="<?= $_POST['name'] ?>" placeholder="Введите название">
-            <?php if($errors['name']){echo "</p>";} ?>
+            <input class="form__input <?= empty($classname)?>" type="text" name="name" id="name" value="<?= isset($_POST['name'])? $_POST['name'] : ''?>" placeholder="Введите название">
+            <?= empty($errors['name']) ? '</p>' : '' ?>
         </div>
 
           <div class="form__row">
             <label class="form__label" for="project">Проект <sup>*</sup></label>
-
             <select class="form__input form__input--select" name="project" id="project">
             <?php foreach ($projects as $project): ?>
               <option value="<?= $project['title_project'] ?>"><?= $project['title_project'] ?></option>
@@ -43,9 +42,9 @@
 
           <div class="form__row">
             <?php $classname =  isset($errors['date']) ? "form__input--error" : ""; ?>
-            <?php if($errors['date']){ echo '<p class="form__message">';} ?>
+            <?= !empty($errors['date']) ? '<p class="form__message">' : '' ?>
             <label class="form__label" for="date">Дата выполнения *</label>
-            <input class="form__input form__input--date <?= $classname?>" type="text" name="date" id="date" value="<?= $_POST['date'] ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+            <input class="form__input form__input--date <?= empty($classname)?>" type="text" name="date" id="date" value="<?= isset($_POST['date'])? $_POST['date'] : ''?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
           </div>
 
           <div class="form__row">
