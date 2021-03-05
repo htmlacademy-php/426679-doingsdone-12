@@ -1,12 +1,14 @@
 <?php
+    /**
+    *Проверка формы регистрации
+    *
+    */
     require_once('templates/functions.php');
 
     $link = conect();
     $errors = null;
     $form = null;
-    ini_set('error_reporting', E_ALL);
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form = $_POST;
         $required = ['email', 'password', 'name'];
@@ -18,8 +20,9 @@
         }
         $email = mysqli_real_escape_string($link, $form['email']);
 
-        
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!$errors) {
                 //Регистрация пользователя(проверка email на существование)
                 $sql = "SELECT email FROM users WHERE email = '$email' ";
                 $result = mysqli_query($link, $sql);
@@ -32,13 +35,13 @@
                     $result = mysqli_stmt_execute($stmt);
                 }
                 if ($result && empty($errors)) {
-                    header("Location: index.php");
+                    header("Location: auth.php");
                     exit();
                 }
-            } else {
-                $errors['email'] = 'Проверьте написание Email';
             }
-        
+        } else {
+            $errors['email'] = 'Проверьте написание Email';
+        }
     }
 
     register($errors, $form);

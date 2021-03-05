@@ -1,11 +1,12 @@
 <?php
-
+    /**
+    *Формирование страницы с проектами
+    *
+    */
     require_once('templates/functions.php');
     $link = conect();
     $errors = [];
-    ini_set('error_reporting', E_ALL);
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
+
     if (isset($_SESSION['user'])) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $form = $_POST;
@@ -16,7 +17,7 @@
                     $errors[$field] = 'Это поле надо заполнить';
                 }
             }
-            
+
             if (empty($errors)) {
                 $sql = "SELECT user_id, title_project FROM projects WHERE title_project = '" . $_POST['name'] ."'";
                 $result = mysqli_query($link, $sql);
@@ -40,8 +41,8 @@
             }
         }
     } else {
-            header("Location: index.php");
-        }
+        header("Location: index.php");
+    }
 
 
     addProjectPage($errors, $projects, $tasks)

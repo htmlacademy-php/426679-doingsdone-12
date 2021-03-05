@@ -17,6 +17,8 @@
             <?php if (isset($errors['email'])): ?>
                 <?php if ($errors['email']=='Проверьте написание Email'): ?>
                     <p class="form__message">E-mail введён некорректно</p>
+                <?php elseif ($errors['email']=='Email не существует'): ?>
+                    <p class="form__message">'Email не существует'</p>
                 <?php endif; ?>
             <?php endif; ?>
             </div>
