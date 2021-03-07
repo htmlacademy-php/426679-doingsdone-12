@@ -1,12 +1,10 @@
 <?php
 
 /**
-*Главная страница
-*
-*/
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ *Главная страница
+ *
+ */
+
 require_once('templates/functions.php');
 $link = conect();
 
@@ -30,11 +28,6 @@ if (isset($_GET['check'])) {
 
 if (isset($_GET['task_id'])) {
     $task_id = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
-    foreach ($tasks as $value) {
-        if ($value['id']== $task_id) {
-            $task_title = $value['title_task'];
-        }
-    }
     mysqli_query($link, "START TRANSACTION");
     $sql = "UPDATE tasks SET st_check = " . $_SESSION['tasks'] . " WHERE id = " . $task_id;
     $t1 = mysqli_query($link, $sql);
@@ -70,8 +63,8 @@ $search = $_GET['q'] ?? '';
 
 if ($search) {
     $sql = "SELECT user_id, st_check, title_task, project_id, dt_end, dl_file FROM tasks " .
-    "JOIN users ON tasks.user_id = users.id " .
-    "WHERE MATCH(title_task) AGAINST(?)";
+        "JOIN users ON tasks.user_id = users.id " .
+        "WHERE MATCH(title_task) AGAINST(?)";
     $stmt = db_get_prepare_stmt($link, $sql, [$search]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -80,7 +73,7 @@ if ($search) {
     if (!empty($result)) {
         $tasks_sort = [];
         foreach ($result as $res) {
-            if ($res['user_id']== $user_id) {
+            if ($res['user_id'] == $user_id) {
                 $tasks_sort[] = $res;
             }
         }
@@ -97,6 +90,3 @@ if (isset($_SESSION['user'])) {
 }
 
 layout($page_content);
-
-?>
-
