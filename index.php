@@ -4,7 +4,9 @@
 *Главная страница
 *
 */
-
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 require_once('templates/functions.php');
 $link = conect();
 
@@ -44,31 +46,6 @@ if (isset($_GET['task_id'])) {
     header("Location: index.php");
 }
 
-
-//Поиск задачи
-$search = $_GET['q'] ?? '';
-
-if ($search) {
-    $sql = "SELECT user_id, title_task, project_id, dt_end, dl_file FROM tasks " .
-    "JOIN users ON tasks.user_id = users.id " .
-    "WHERE MATCH(title_task) AGAINST(?)";
-    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-    if (!empty($result)) {
-        $tasks_sort = [];
-        foreach ($result as $res) {
-            if ($res['user_id']== $user_id) {
-                $tasks_sort[] = $res;
-            }
-        }
-    } else {
-        $tasks_sort = [];
-    }
-}
-
 //Сортировка даты
 $sort_date = filter_input(INPUT_GET, 'sort_date');
 if ($sort_date == "Повестка дня") {
@@ -85,6 +62,31 @@ if ($sort_date == "Повестка дня") {
     $tasks_sort = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } else {
     $sort_date = "Все задачи";
+}
+
+
+//Поиск задачи
+$search = $_GET['q'] ?? '';
+
+if ($search) {
+    $sql = "SELECT user_id, st_check, title_task, project_id, dt_end, dl_file FROM tasks " .
+    "JOIN users ON tasks.user_id = users.id " .
+    "WHERE MATCH(title_task) AGAINST(?)";
+    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sort_date = '';
+    if (!empty($result)) {
+        $tasks_sort = [];
+        foreach ($result as $res) {
+            if ($res['user_id']== $user_id) {
+                $tasks_sort[] = $res;
+            }
+        }
+    } else {
+        $tasks_sort = [];
+    }
 }
 
 //Добавляем задачу

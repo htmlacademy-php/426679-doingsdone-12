@@ -1,6 +1,4 @@
-<?php
-    require_once('auth.php')
-?>
+
 <div class="content">
 
     <section class="content__side">
@@ -13,7 +11,7 @@
             <div class="form__row">
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-            <input class="form__input <?php echo $errors['email'] ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= isset($_POST['email'])? $_POST['email'] : '' ?>" placeholder="Введите e-mail">
+            <input class="form__input <?php echo isset($errors['email']) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= isset($_POST['email'])? $_POST['email'] : '' ?>" placeholder="Введите e-mail">
             <?php if (isset($errors['email'])): ?>
                 <?php if ($errors['email']=='Проверьте написание Email'): ?>
                     <p class="form__message">E-mail введён некорректно</p>
@@ -26,8 +24,8 @@
             <div class="form__row">
             <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-            <input class="form__input <?php echo $errors['password'] ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
-            <?php if (!empty($errors['password'])): ?>
+            <input class="form__input <?php echo isset($errors['password']) ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+            <?php if (isset($errors['password'])): ?>
                 <p class="form__message">Это поле надо заполнить</p>
             <?php endif; ?>
             </div>
